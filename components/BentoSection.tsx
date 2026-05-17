@@ -41,6 +41,8 @@ const BentoSection = () => {
         const el = document.querySelector(".bento-image-4") as HTMLElement;
         if (!el) return;
 
+        const naturalW = el.offsetWidth;
+        const naturalH = el.offsetHeight;
         const AllImageArray = [
           ".bento-image-1",
           ".bento-image-2",
@@ -66,7 +68,6 @@ const BentoSection = () => {
             pin: true,
             scrub: true,
             invalidateOnRefresh: true,
-
           },
         });
         AllImageArray.forEach((el, i) => {
@@ -120,10 +121,10 @@ const BentoSection = () => {
           );
         });
 
-        const rect = el.getBoundingClientRect();
-        const scaleX = window.innerWidth / rect.width;
-        const scaleY = window.innerHeight / rect.height;
-        const fillScale = Math.max(scaleX, scaleY) * 1.2;
+        // const rect = el.getBoundingClientRect();
+        // const scaleX = window.innerWidth / rect.width;
+        // const scaleY = window.innerHeight / rect.height;
+        // const fillScale = Math.max(scaleX, scaleY) * 1.2;
 
         tl.fromTo(
           ".bento-image-4",
@@ -137,8 +138,13 @@ const BentoSection = () => {
             objectPosition: "bottom",
           },
           {
-            scale: isDesktop ? fillScale / 1.3 : fillScale,
-            translateX:-5,
+            scale: () => {
+              const scaleX = window.innerWidth / naturalW;
+              const scaleY = window.innerHeight / naturalH;
+              const fillScale = Math.max(scaleX, scaleY) * 1.2;
+              return isDesktop ? fillScale / 2 : fillScale / 1.34;
+            },
+            translateX: -5,
             clipPath: isDesktop ? "inset(0% 0% 0% 0%)" : "inset(0% 0% 0% 7.6%)",
             zIndex: 50,
           },
