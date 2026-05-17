@@ -69,61 +69,21 @@ const BentoSection = () => {
             scrub: true,
           },
         });
-        AllImageArray.forEach((el, i) => {
-          let moveX = 0;
-          let moveY = 0;
-          let rotate = 0;
-
-          switch (i) {
-            case 0:
-              moveX = -250;
-              moveY = -100;
-              rotate = -20;
-              break;
-            case 1:
-              moveX = 0;
-              moveY = -100;
-              rotate = -5;
-              break;
-            case 2:
-              moveX = 300;
-              moveY = 100;
-              rotate = 20;
-              break;
-            case 3:
-              moveX = 200;
-              moveY = 300;
-              rotate = 35;
-              break;
-            case 4:
-              moveX = -200;
-              moveY = 100;
-              rotate = -40;
-              break;
-            case 5:
-              moveX = 60;
-              moveY = 200;
-              rotate = 5;
-              break;
-          }
+        AllImageArray.forEach((el) => {
+       
           tl.to(
             el,
             {
               opacity: 0,
               filter: "blur(4px)",
-              x: isDesktop ? moveX / 1.7 : gsap.utils.random(-200, 200),
-              y: isDesktop ? moveY / 1.7 : gsap.utils.random(-200, 200),
-              rotation: rotate,
+              x: gsap.utils.random(-200, 200),
+              y: gsap.utils.random(-200, 200),
+              rotation: gsap.utils.random(-30, 30),
               scale: 0.5,
             },
             "<",
           );
         });
-
-        // const rect = el.getBoundingClientRect();
-        // const scaleX = window.innerWidth / rect.width;
-        // const scaleY = window.innerHeight / rect.height;
-        // const fillScale = Math.max(scaleX, scaleY) * 1.2;
 
         tl.fromTo(
           ".bento-image-4",
@@ -137,16 +97,11 @@ const BentoSection = () => {
             objectPosition: "bottom",
           },
           {
-            scale: () => {
-              const scaleX = window.innerWidth / naturalW;
-              const scaleY = window.innerHeight / naturalH;
-              const fillScale = Math.max(scaleX, scaleY) * 1.2;
-              return isDesktop ? fillScale / 2 : fillScale / 1.34;
-            },
+            scale: 2.5,
             translateX: -5,
             clipPath: isDesktop ? "inset(0% 0% 0% 0%)" : "inset(0% 0% 0% 7.6%)",
             zIndex: 50,
-          },
+          }, "<"
         );
       },
     );
