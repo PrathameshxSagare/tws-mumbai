@@ -67,7 +67,6 @@ const BentoSection = () => {
             end: "+=1400",
             pin: true,
             scrub: true,
-            invalidateOnRefresh: true,
           },
         });
         AllImageArray.forEach((el, i) => {
@@ -112,8 +111,8 @@ const BentoSection = () => {
             {
               opacity: 0,
               filter: "blur(4px)",
-              x: isDesktop ? moveX / 1.7 : moveX / 3,
-              y: isDesktop ? moveY / 1.7 : moveY / 3,
+              x: isDesktop ? moveX / 1.7 : gsap.utils.random(-200, 200),
+              y: isDesktop ? moveY / 1.7 : gsap.utils.random(-200, 200),
               rotation: rotate,
               scale: 0.5,
             },
