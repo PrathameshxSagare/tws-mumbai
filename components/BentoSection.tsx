@@ -58,16 +58,52 @@ const BentoSection = () => {
             },
           });
 
-          allImageArray.forEach((el) => {
+          allImageArray.forEach((el, i) => {
+            let moveX = 0;
+          let moveY = 0;
+          let rotate = 0;
+
+          switch (i) {
+            case 0:
+              moveX = -250;
+              moveY = -100;
+              rotate = -20;
+              break;
+            case 1:
+              moveX = 0;
+              moveY = -100;
+              rotate = -5;
+              break;
+            case 2:
+              moveX = 300;
+              moveY = 100;
+              rotate = 20;
+              break;
+            case 3:
+              moveX = 200;
+              moveY = 300;
+              rotate = 35;
+              break;
+            case 4:
+              moveX = -200;
+              moveY = 100;
+              rotate = -40;
+              break;
+            case 5:
+              moveX = 60;
+              moveY = 200;
+              rotate = 5;
+              break;
+          }
             tl.to(
               el,
               {
                 opacity: 0,
                 filter: "blur(4px)",
-                x: () => gsap.utils.random(-200, 200),
-                y: () => gsap.utils.random(-200, 200),
-                rotation: () => gsap.utils.random(-30, 30),
-                scale: 0.5,
+              x: isDesktop ? moveX / 1.7 : moveX / 3,
+              y: isDesktop ? moveY / 1.7 : moveY / 3,
+              rotation: rotate,
+              scale: 0.5,
               },
               0,
             );

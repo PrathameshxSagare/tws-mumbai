@@ -27,7 +27,7 @@ const Page = () => {
       <FamousPeopleCarousel />
       <PositioningSec text={texts.text1} />
       <BentoSection />
-      <div className="w-screen h-[130vh] md:h-[194vh]"></div>
+      <div className="w-screen h-[120vh] md:h-[194vh]"></div>
       <WhatWeDo />
       <RecentWorks />
       <GalleryCTA />
