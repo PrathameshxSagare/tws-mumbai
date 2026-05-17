@@ -3,80 +3,118 @@ import CldImageWrapper from "@/components/CldImageWrapper";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
+import { useRef } from "react";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const BentoSection = () => {
-  useGSAP(() => {
-    const AllImageArray = [
-      ".bento-image-1",
-      ".bento-image-2",
-      ".bento-image-3",
-      ".bento-image-5",
-      ".bento-image-6",
-      ".bento-image-7",
-    ];
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-    const mm = gsap.matchMedia();
-    
-    mm.add(
-      {
-        isDesktop: "(min-width: 768px)",
-        isMobile: "(max-width: 767px)",
-      },
-      (context) => {
-        const { isDesktop } = context.conditions!;
+  useGSAP(
+    () => {
+      if (!sectionRef.current || !containerRef.current) return;
 
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: ".bento-container",
-            start: isDesktop ? "top top" : "top 20%",
-            end: "+=1400",
-            pin: true,
-            scrub: true,
-            invalidateOnRefresh: true, // Crucial for responsive/random setups
-          },
-        });
+      const allImageArray = [
+        ".bento-image-1",
+        ".bento-image-2",
+        ".bento-image-3",
+        ".bento-image-5",
+        ".bento-image-6",
+        ".bento-image-7",
+      ];
 
-        AllImageArray.forEach((el) => {
-          tl.to(
-            el,
-            {
-              opacity: 0,
-              filter: "blur(4px)",
-              // Use function-based values so GSAP can recalculate properly
-              x: () => gsap.utils.random(-200, 200),
-              y: () => gsap.utils.random(-200, 200),
-              rotation: () => gsap.utils.random(-30, 30),
-              scale: 0.5,
+      const safeRefresh = () => ScrollTrigger.refresh(true);
+      const rafId = window.requestAnimationFrame(safeRefresh);
+      const timeoutId = window.setTimeout(safeRefresh, 220);
+
+      window.addEventListener("load", safeRefresh);
+      window.addEventListener("pageshow", safeRefresh);
+
+      const mm = gsap.matchMedia();
+
+      mm.add(
+        {
+          isDesktop: "(min-width: 768px)",
+          isMobile: "(max-width: 767px)",
+        },
+        (context) => {
+          const { isDesktop } = context.conditions as {
+            isDesktop: boolean;
+            isMobile: boolean;
+          };
+
+          gsap.set([...allImageArray, ".bento-image-4"], { clearProps: "all" });
+
+          const tl = gsap.timeline({
+            defaults: { ease: "none" },
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              pin: containerRef.current,
+              start: "top top",
+              end: () => `+=${isDesktop ? 1400 : 1100}`,
+              scrub: true,
+              invalidateOnRefresh: true,
             },
-            "<",
-          );
-        });
+          });
 
-        tl.fromTo(
-          ".bento-image-4",
-          {
-            scale: 2,
-            clipPath: isDesktop
-              ? "inset(30% 40% 30% 40%)"
-              : "inset(30% 25% 30% 32%)",
-          },
-          {
-            scale: 2.5,
-            translateX: -5,
-            clipPath: isDesktop ? "inset(0% 0% 0% 0%)" : "inset(0% 0% 0% 7.6%)",
-            zIndex: 50,
-          },
-          "<"
-        );
-      },
-    );
-  }, []); // useGSAP handles cleanup automatically
+          allImageArray.forEach((el) => {
+            tl.to(
+              el,
+              {
+                opacity: 0,
+                filter: "blur(4px)",
+                x: () => gsap.utils.random(-200, 200),
+                y: () => gsap.utils.random(-200, 200),
+                rotation: () => gsap.utils.random(-30, 30),
+                scale: 0.5,
+              },
+              0,
+            );
+          });
+
+          tl.fromTo(
+            ".bento-image-4",
+            {
+              scale: 2,
+              clipPath: isDesktop
+                ? "inset(30% 40% 30% 40%)"
+                : "inset(30% 25% 30% 32%)",
+            },
+            {
+              scale: 2.5,
+              x: -5,
+              clipPath: isDesktop
+                ? "inset(0% 0% 0% 0%)"
+                : "inset(0% 0% 0% 7.6%)",
+              zIndex: 50,
+              immediateRender: false,
+            },
+            0,
+          );
+        },
+      );
+
+      return () => {
+        window.removeEventListener("load", safeRefresh);
+        window.removeEventListener("pageshow", safeRefresh);
+        window.clearTimeout(timeoutId);
+        window.cancelAnimationFrame(rafId);
+        mm.revert();
+      };
+    },
+    { scope: sectionRef },
+  );
 
   return (
-    <div className="w-full min-h-screen flex flex-col justify-center items-center gap-y-2 px-2 bento-section">
-      <div className="w-full h-[70%] grid grid-cols-3 gap-y-4 gap-x-4 place-items-center bento-container px-2">
+    <div
+      ref={sectionRef}
+      className="w-full min-h-screen flex flex-col justify-center items-center gap-y-2 px-2 bento-section"
+    >
+      <div
+        ref={containerRef}
+        className="w-full h-[70%] grid grid-cols-3 gap-y-4 gap-x-4 place-items-center bento-container px-2"
+      >
         <CldImageWrapper
           src="79"
           classname="w-30 h-72 md:w-52 md:h-96  object-cover object-center row-span-2 bento-image-1"
