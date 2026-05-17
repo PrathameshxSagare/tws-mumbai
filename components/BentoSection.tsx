@@ -39,11 +39,8 @@ const BentoSection = () => {
         // });
 
         const el = document.querySelector(".bento-image-4") as HTMLElement;
-        const rect = el.getBoundingClientRect();
-        if (!el) return 1;
-        const scaleX = window.innerWidth / rect.width;
-        const scaleY = window.innerHeight / rect.height;
-        const fillScale = Math.max(scaleX, scaleY) * 1.2;
+        if (!el) return;
+
         const AllImageArray = [
           ".bento-image-1",
           ".bento-image-2",
@@ -53,6 +50,14 @@ const BentoSection = () => {
           ".bento-image-7",
         ];
 
+        gsap.set(".bento-image-4", {
+          scale: 2,
+          clipPath: isDesktop
+            ? "inset(30% 40% 30% 40%)"
+            : "inset(30% 15% 30% 32%)",
+          zIndex: 1,
+        });
+
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: ".bento-container",
@@ -60,6 +65,8 @@ const BentoSection = () => {
             end: "+=1400",
             pin: true,
             scrub: true,
+            invalidateOnRefresh: true,
+
           },
         });
         AllImageArray.forEach((el, i) => {
@@ -104,14 +111,19 @@ const BentoSection = () => {
             {
               opacity: 0,
               filter: "blur(4px)",
-              x: isDesktop ? moveX/1.7 : moveX/3,
-              y: isDesktop ? moveY/1.7 : moveY/3,
+              x: isDesktop ? moveX / 1.7 : moveX / 3,
+              y: isDesktop ? moveY / 1.7 : moveY / 3,
               rotation: rotate,
               scale: 0.5,
             },
             "<",
           );
         });
+
+        const rect = el.getBoundingClientRect();
+        const scaleX = window.innerWidth / rect.width;
+        const scaleY = window.innerHeight / rect.height;
+        const fillScale = Math.max(scaleX, scaleY) * 1.2;
 
         tl.fromTo(
           ".bento-image-4",
@@ -120,12 +132,13 @@ const BentoSection = () => {
             //   clipPath: "inset(30% 40% 30% 40%)",
             clipPath: isDesktop
               ? "inset(30% 40% 30% 40%)"
-              : "inset(30% 15% 30% 32%)",
+              : "inset(30% 25% 30% 32%)",
 
             objectPosition: "bottom",
           },
           {
-            scale: isDesktop ? fillScale / 2 : fillScale / 1.35,
+            scale: isDesktop ? fillScale / 1.3 : fillScale,
+            translateX:-5,
             clipPath: isDesktop ? "inset(0% 0% 0% 0%)" : "inset(0% 0% 0% 7.6%)",
             zIndex: 50,
           },
@@ -158,7 +171,7 @@ const BentoSection = () => {
           src="5"
           quality="90"
           isPreload={true}
-          classname="w-32 h-40 md:w-80 md:h-52 object-cover object-center -translate-x-5 bento-image-4"
+          classname="w-32 h-40 md:w-80 md:h-52 object-cover object-center bento-image-4"
         />
         <CldImageWrapper
           src="76"
