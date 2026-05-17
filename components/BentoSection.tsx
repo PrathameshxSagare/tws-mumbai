@@ -8,14 +8,17 @@ gsap.registerPlugin(ScrollTrigger);
 
 const BentoSection = () => {
   useGSAP(() => {
-    // const ImageArray = [
-    //   ".bento-image-1",
-    //   ".bento-image-3",
-    //   ".bento-image-5",
-    //   ".bento-image-6",
-    // ];
+    const AllImageArray = [
+      ".bento-image-1",
+      ".bento-image-2",
+      ".bento-image-3",
+      ".bento-image-5",
+      ".bento-image-6",
+      ".bento-image-7",
+    ];
 
     const mm = gsap.matchMedia();
+    
     mm.add(
       {
         isDesktop: "(min-width: 768px)",
@@ -23,42 +26,6 @@ const BentoSection = () => {
       },
       (context) => {
         const { isDesktop } = context.conditions!;
-        // ImageArray.forEach((el) => {
-        //   gsap.to(el, {
-        //     y: isDesktop
-        //       ? gsap.utils.random(-220, -250)
-        //       : gsap.utils.random(-160, -220),
-        //     x: gsap.utils.random(5, 6),
-        //     scrollTrigger: {
-        //       trigger: ".bento-section",
-        //       start: "top bottom",
-        //       end: "top top",
-        //       scrub: 1,
-        //     },
-        //   });
-        // });
-
-        const el = document.querySelector(".bento-image-4") as HTMLElement;
-        if (!el) return;
-
-        const naturalW = el.offsetWidth;
-        const naturalH = el.offsetHeight;
-        const AllImageArray = [
-          ".bento-image-1",
-          ".bento-image-2",
-          ".bento-image-3",
-          ".bento-image-5",
-          ".bento-image-6",
-          ".bento-image-7",
-        ];
-
-        gsap.set(".bento-image-4", {
-          scale: 2,
-          clipPath: isDesktop
-            ? "inset(30% 40% 30% 40%)"
-            : "inset(30% 15% 30% 32%)",
-          zIndex: 1,
-        });
 
         const tl = gsap.timeline({
           scrollTrigger: {
@@ -67,18 +34,20 @@ const BentoSection = () => {
             end: "+=1400",
             pin: true,
             scrub: true,
+            invalidateOnRefresh: true, // Crucial for responsive/random setups
           },
         });
+
         AllImageArray.forEach((el) => {
-       
           tl.to(
             el,
             {
               opacity: 0,
               filter: "blur(4px)",
-              x: gsap.utils.random(-200, 200),
-              y: gsap.utils.random(-200, 200),
-              rotation: gsap.utils.random(-30, 30),
+              // Use function-based values so GSAP can recalculate properly
+              x: () => gsap.utils.random(-200, 200),
+              y: () => gsap.utils.random(-200, 200),
+              rotation: () => gsap.utils.random(-30, 30),
               scale: 0.5,
             },
             "<",
@@ -89,27 +58,21 @@ const BentoSection = () => {
           ".bento-image-4",
           {
             scale: 2,
-            //   clipPath: "inset(30% 40% 30% 40%)",
             clipPath: isDesktop
               ? "inset(30% 40% 30% 40%)"
               : "inset(30% 25% 30% 32%)",
-
-            objectPosition: "bottom",
           },
           {
             scale: 2.5,
             translateX: -5,
             clipPath: isDesktop ? "inset(0% 0% 0% 0%)" : "inset(0% 0% 0% 7.6%)",
             zIndex: 50,
-          }, "<"
+          },
+          "<"
         );
       },
     );
-
-    return () => {
-      mm.revert();
-    };
-  }, []);
+  }, []); // useGSAP handles cleanup automatically
 
   return (
     <div className="w-full min-h-screen flex flex-col justify-center items-center gap-y-2 px-2 bento-section">
