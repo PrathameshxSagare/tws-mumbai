@@ -95,7 +95,7 @@ const AboutUs = () => {
         <div className="flex flex-col gap-12 md:pt-0">
           <div className="about-reveal flex flex-col gap-7">
             <p className="max-w-3xl font-seasons text-xl font-light leading-[1.12] text-black md:text-2xl">
-              Led by founder Prathamesh Sudhir Sagare, <br /> TWS Mumbai
+              Led by founder Prathamesh Sudhir Sagare, <br /> TWS Mumbai (The Wedding Stories Mumbai)
               creates refined wedding imagery for couples who care about
               beauty, emotion, and the quiet details that make a celebration
               feel deeply personal.
